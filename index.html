@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LaunchPad.dev · Agile Portfolio ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #ff6b9d;
+      --lavender: #c77dff;
+      --mint: #80ed99;
+      --sky: #72d5ff;
+      --cream: #fff8f5;
+      --soft-bg: #fff0f5;
+      --text: #2d2a32;
+      --muted: #6b6570;
+      --card: #ffffff;
+      --shadow: 0 10px 40px -10px rgba(255, 107, 157, 0.25);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      background: linear-gradient(180deg, #fff0f5 0%, #f0f7ff 40%, #f5fff8 100%);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* Decorative blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .blob-1 { width: 400px; height: 400px; background: var(--pink); top: -100px; left: -100px; }
+    .blob-2 { width: 350px; height: 350px; background: var(--lavender); top: 40%; right: -80px; }
+    .blob-3 { width: 300px; height: 300px; background: var(--mint); bottom: 10%; left: 10%; }
+
+    /* PDF & Video embeds */
+    .pdf-frame {
+      width: 100%;
+      height: 520px;
+      border: 2px solid #ffe0ec;
+      border-radius: 14px;
+      margin: 1rem 0;
+      background: #fafafa;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      margin: 1rem auto;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(255,107,157,0.2);
+      border: 3px solid #ffe0ec;
+    }
+    .video-wrapper video {
+      width: 100%;
+      display: block;
+      background: #111;
+    }
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+    .doc-card {
+      background: linear-gradient(135deg, #fff8fb, #f8f0ff);
+      border: 2px solid #ffd0e0;
+      border-radius: 14px;
+      padding: 1.1rem;
+      text-align: center;
+      transition: all 0.25s;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .doc-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(255,107,157,0.2);
+      border-color: var(--pink);
+    }
+    .doc-card .icon { font-size: 2rem; }
+    .doc-card .title { font-weight: 700; font-size: 0.85rem; line-height: 1.3; }
+
+    header {
+      text-align: center;
+      padding: 4rem 1.5rem 3rem;
+      position: relative;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge {
+      background: white;
+      border: 2px solid #ffe0ec;
+      color: var(--pink);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(255,107,157,0.15);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      background: linear-gradient(120deg, var(--pink), var(--lavender));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 1.8rem;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--lavender));
+      color: white;
+      box-shadow: 0 8px 25px rgba(255,107,157,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,107,157,0.5); }
+
+    .btn-ghost {
+      background: white;
+      color: var(--pink);
+      border: 2px solid #ffd0e0;
+    }
+    .btn-ghost:hover { background: #fff5f8; }
+
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #ffe8f0;
+      z-index: 100;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      transition: all 0.2s;
+    }
+    nav a:hover, nav a.active {
+      background: #ffe8f0;
+      color: var(--pink);
+    }
+
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 5rem;
+    }
+
+    section {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2.2rem 2rem;
+      margin-bottom: 2.2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid #ffe8f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--pink), var(--lavender), var(--sky));
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-icon {
+      font-size: 1.8rem;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ffe8f0, #f0e6ff);
+      border-radius: 16px;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      color: var(--text);
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      margin: 1.6rem 0 0.8rem;
+      color: var(--pink);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    p, li { color: var(--text); margin-bottom: 0.7rem; }
+    ul { padding-left: 1.3rem; margin-bottom: 1rem; }
+
+    .evidence-box {
+      background: linear-gradient(135deg, #fff8fb, #f8f0ff);
+      border: 1px dashed #ffc0d4;
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .star-box {
+      background: #f8fffb;
+      border-left: 5px solid var(--mint);
+      border-radius: 0 14px 14px 0;
+      padding: 1.3rem 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .star-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      margin-bottom: 0.4rem;
+    }
+    .s { background: #ffe0ec; color: #c2185b; }
+    .t { background: #e0f0ff; color: #1565c0; }
+    .a { background: #e8f5e9; color: #2e7d32; }
+    .r { background: #f3e5f5; color: #7b1fa2; }
+
+    .star-part { margin-bottom: 1rem; }
+    .star-part:last-child { margin-bottom: 0; }
+
+    .img-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      margin: 1.2rem 0;
+    }
+
+    .img-grid img {
+      width: 100%;
+      border-radius: 12px;
+      border: 2px solid #ffe8f0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      transition: transform 0.25s;
+    }
+    .img-grid img:hover { transform: scale(1.02); }
+
+    .link-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: white;
+      border: 2px solid #ffd0e0;
+      color: var(--pink);
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+      margin: 0.3rem 0.3rem 0.3rem 0;
+      transition: all 0.2s;
+    }
+    .link-pill:hover { background: #fff0f5; transform: translateY(-2px); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    th, td {
+      padding: 0.7rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ffe8f0;
+    }
+    th { background: #fff5f8; color: var(--pink); font-weight: 700; }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    footer .heart { color: var(--pink); }
+
+    @media (max-width: 600px) {
+      section { padding: 1.6rem 1.2rem; }
+      h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <header>
+    <div class="badge-row">
+      <span class="badge">🚀 LaunchPad.dev</span>
+      <span class="badge">Kanban + Scrum</span>
+      <span class="badge">CPUT · PRP372S</span>
+      <span class="badge">WIL 2026</span>
+    </div>
+    <h1>My Agile Portfolio</h1>
+    <p class="subtitle">
+      A cute & evidence-rich journey of building a student career platform with real Agile practices, Trello boards, and lots of stand-ups.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://launchpad-ev-production.up.railway.app/" target="_blank">🌐 Live Application</a>
+      <a class="btn btn-ghost" href="assets/evidence/team-charter/Agile%20Team%20Charter.pdf" target="_blank">📄 Team Charter</a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="#charter">Team Charter</a>
+    <a href="#stories">User Stories</a>
+    <a href="#product">Product Backlog</a>
+    <a href="#sprint">Sprint Backlog</a>
+    <a href="#videos">Videos</a>
+    <a href="#logbook">Agile Logbook</a>
+    <a href="#final">Final Thoughts</a>
+  </nav>
+
+  <main>
+
+    <!-- TEAM CHARTER -->
+    <section id="charter">
+      <div class="section-header">
+        <div class="section-icon">🚀</div>
+        <h2>Agile Team Charter</h2>
+      </div>
+
+      <h3>🖼️ Evidence</h3>
+      <div class="evidence-box">
+        <p>Our living social contract that defined purpose, roles, working agreements, ceremonies, Definition of Done, and core values for the entire July–October 2026 project.</p>
+        
+        <!-- Embedded PDF Viewer -->
+        <iframe 
+          class="pdf-frame" 
+          src="assets/evidence/team-charter/Agile%20Team%20Charter.pdf" 
+          title="Agile Team Charter PDF">
+        </iframe>
+        
+        <div style="text-align:center; margin:0.8rem 0;">
+          <a class="link-pill" href="assets/evidence/team-charter/Agile%20Team%20Charter.pdf" target="_blank">📄 Open Full Charter in new tab</a>
+        </div>
+
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Reotshepile Stock</td><td>Agile Lead (Scrum Master)</td></tr>
+            <tr><td>Lucky Twala</td><td>Technical & Feasibility Lead</td></tr>
+            <tr><td>Qhubekani Shandu</td><td>Developer / Research Lead</td></tr>
+            <tr><td>Pertunia Sifunda</td><td>Analyst / Marketing Lead</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>🌟 Reflection — STAR Method</h3>
+      <div class="star-box">
+        <div class="star-part">
+          <span class="star-label s">Situation</span>
+          <p>At the start we were four students with different strengths and schedules. Without a shared agreement we risked unequal participation, missed deadlines and scope creep.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label t">Task</span>
+          <p>Help create and live by a Team Charter that would serve as our north star — defining purpose, roles, working agreements, decision-making and a clear Definition of Done.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label a">Action</span>
+          <p>We co-created the charter. I contributed to Ways of Working (Kanban columns + WIP limits of 2), communication norms and the risk register. We treated it as a living document and revisited it after every retrospective.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label r">Result</span>
+          <p>Friction dropped dramatically. Stand-ups stayed focused, blockers were raised within 24 hours, and we achieved 100% participation evidence on Trello. The charter turned individuals into a real Agile team.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- USER STORIES -->
+    <section id="stories">
+      <div class="section-header">
+        <div class="section-icon">📝</div>
+        <h2>User Stories & Tasks</h2>
+      </div>
+
+      <h3>🖼️ Evidence</h3>
+      <div class="evidence-box">
+        <!-- Trello link (replace # with your public Trello link later) -->
+        <div style="text-align:center; margin-bottom:1.2rem;">
+          <a class="btn btn-primary" href="#" target="_blank" id="trello-link-stories" style="font-size:0.95rem;">
+            📋 Open Trello Board (User Stories)
+          </a>
+        </div>
+        <p>Stories written from the ICT student’s perspective and broken into small, estimable tasks with clear acceptance criteria on Trello.</p>
+        <p><strong>Examples:</strong> US-01 Project Planning · US-02 Technical Foundation · US-03 Register & Log in · … up to US-18 covering Portfolio Builder, Mock Interview Arena, Mentor Matching and CV/GitHub Audit.</p>
+        <a class="link-pill" href="assets/evidence/user-stories/" target="_blank">📁 Open full evidence folder</a>
+      </div>
+
+      <div class="img-grid">
+        <img src="assets/evidence/user-stories/UserStories1.png" alt="User Stories overview" loading="lazy" />
+        <img src="assets/evidence/user-stories/US-01.png" alt="US-01 Project Planning" loading="lazy" />
+        <img src="assets/evidence/user-stories/US-03.png" alt="US-03 Register and Log in" loading="lazy" />
+      </div>
+
+      <h3>🌟 Reflection — STAR Method</h3>
+      <div class="star-box">
+        <div class="star-part">
+          <span class="star-label s">Situation</span>
+          <p>Early tasks were still high-level (“build the portfolio feature”), making it hard to know when something was truly finished and causing uneven workload.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label t">Task</span>
+          <p>Break every feature into INVEST-style user stories, attach acceptance criteria, and decompose them into small tasks that could be completed in a few days.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label a">Action</span>
+          <p>I actively participated in story-writing workshops, helped define acceptance criteria, created/refined related tasks and made sure every card had an owner, due date and checklist.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label r">Result</span>
+          <p>By Sprint 3 the board was transparent. Everyone knew exactly what “done” looked like. Velocity improved and last-minute surprises before demos disappeared.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCT BACKLOG -->
+    <section id="product">
+      <div class="section-header">
+        <div class="section-icon">📦</div>
+        <h2>Product Backlog</h2>
+      </div>
+
+      <h3>🖼️ Evidence</h3>
+      <div class="evidence-box">
+        <!-- Trello link (replace # with your public Trello link later) -->
+        <div style="text-align:center; margin-bottom:1.2rem;">
+          <a class="btn btn-primary" href="#" target="_blank" id="trello-link-product" style="font-size:0.95rem;">
+            📋 Open Trello Board (Product Backlog)
+          </a>
+        </div>
+        <p>A prioritised, living list of everything needed to deliver LaunchPad.dev — features, technical work, research, documentation and final pitch tasks. Continuously refined with research findings and lecturer feedback.</p>
+        <a class="link-pill" href="assets/evidence/product-backlog/" target="_blank">📁 Open full evidence folder</a>
+      </div>
+
+      <div class="img-grid">
+        <img src="assets/evidence/product-backlog/ProductBacklog10.png" alt="Product Backlog" loading="lazy" />
+        <img src="assets/evidence/product-backlog/WIL%20PRODUCT%20BACKLOG.png" alt="WIL Product Backlog" loading="lazy" />
+      </div>
+
+      <h3>🌟 Reflection — STAR Method</h3>
+      <div class="star-box">
+        <div class="star-part">
+          <span class="star-label s">Situation</span>
+          <p>The early backlog was a simple list of ideas. As research and lecturer feedback arrived, new items appeared and priorities shifted (especially visual design).</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label t">Task</span>
+          <p>Maintain a prioritised Product Backlog that reflected current value, technical risk and learning, while keeping it transparent to the team and lecturer.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label a">Action</span>
+          <p>I regularly refined the backlog with the team: prioritising, splitting large items, adding research-driven stories and using the Definition of Done as the exit filter. Screenshots and a video walkthrough captured the evolution.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label r">Result</span>
+          <p>The backlog stayed healthy and realistic. When the final deployment and pitch approached, the top of the backlog clearly showed exactly what still needed finishing — giving us calm, focused sprints.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPRINT BACKLOG -->
+    <section id="sprint">
+      <div class="section-header">
+        <div class="section-icon">🏃</div>
+        <h2>Sprint Backlog</h2>
+      </div>
+
+      <h3>🖼️ Evidence</h3>
+      <div class="evidence-box">
+        <!-- Trello link (replace # with your public Trello link later) -->
+        <div style="text-align:center; margin-bottom:1.2rem;">
+          <a class="btn btn-primary" href="#" target="_blank" id="trello-link-sprint" style="font-size:0.95rem;">
+            📋 Open Trello Board (Sprint Backlog)
+          </a>
+        </div>
+        <p>Real-time, actionable plans pulled from the Product Backlog for short (usually 4-day) sprints aligned with our academic calendar. Examples: Sprint 1 focused on repository setup, Spring Boot, Figma design system and presentation updates.</p>
+        <a class="link-pill" href="assets/evidence/sprint-backlog/" target="_blank">📁 Open full evidence folder</a>
+      </div>
+
+      <div class="img-grid">
+        <img src="assets/evidence/sprint-backlog/Sprint1.png" alt="Sprint 1" loading="lazy" />
+        <img src="assets/evidence/sprint-backlog/Sprint2A.png" alt="Sprint 2" loading="lazy" />
+        <img src="assets/evidence/sprint-backlog/SprintsCompleted.png" alt="Sprints Completed" loading="lazy" />
+      </div>
+
+      <h3>🌟 Reflection — STAR Method</h3>
+      <div class="star-box">
+        <div class="star-part">
+          <span class="star-label s">Situation</span>
+          <p>With four team members juggling multiple subjects, long planning sessions didn’t work. We needed short, focused sprints that still delivered visible progress every week.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label t">Task</span>
+          <p>Create and manage Sprint Backlogs that were realistic for our capacity, clearly owned, and visible on Trello so progress and blockers were obvious at every stand-up.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label a">Action</span>
+          <p>During Sprint Planning I helped select highest-priority items that fit our WIP limits, broke work into finishable cards, assigned owners and added checklists. Mid-sprint I updated cards daily and flagged risks early.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label r">Result</span>
+          <p>We consistently moved cards to Done. The visual Sprint Backlogs made it easy to celebrate wins and re-plan when design changes were requested. By the final sprints we had a smooth rhythm and a deployed application.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEOS -->
+    <section id="videos">
+      <div class="section-header">
+        <div class="section-icon">🎬</div>
+        <h2>Videos & Walkthroughs</h2>
+      </div>
+
+      <h3>🖼️ Evidence</h3>
+      <div class="evidence-box">
+        <p>Two key video artefacts that show the real working application and how we managed the Product Backlog on Trello.</p>
+      </div>
+
+      <!-- LIVE APPLICATION -->
+      <h3 style="margin-top:1.8rem;">🚀 Live Application</h3>
+      <div style="text-align:center; margin:0.9rem 0 1.2rem;">
+        <a class="btn btn-primary" href="https://launchpad-ev-production.up.railway.app/" target="_blank" style="font-size:1.05rem; padding:0.85rem 1.9rem;">
+          🌐 Open Live Application
+        </a>
+      </div>
+      <p style="text-align:center; color:var(--muted); margin-bottom:1rem;">Full walkthrough of the deployed LaunchPad.dev application</p>
+      <div class="video-wrapper">
+        <video controls preload="metadata">
+          <source src="assets/evidence/videos/LaunchPad_live%20application.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div style="text-align:center; margin:0.8rem 0 2.5rem;">
+        <a class="link-pill" href="assets/evidence/videos/LaunchPad_live%20application.mp4" target="_blank">⬇️ Download video</a>
+      </div>
+
+      <!-- PRODUCT BACKLOG VIDEO -->
+      <h3>📦 Product Backlog Walkthrough (Trello)</h3>
+      <p>Video showing the live Product Backlog on our Trello board.</p>
+      <div class="video-wrapper">
+        <video controls preload="metadata">
+          <source src="assets/evidence/videos/Product_BacklogVid.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div style="text-align:center; margin:0.8rem 0;">
+        <a class="link-pill" href="assets/evidence/videos/Product_BacklogVid.mp4" target="_blank">⬇️ Download video</a>
+      </div>
+    </section>
+
+    <!-- AGILE LOGBOOK -->
+    <section id="logbook">
+      <div class="section-header">
+        <div class="section-icon">📔</div>
+        <h2>Agile Logbook</h2>
+      </div>
+
+      <h3>🖼️ Evidence</h3>
+      <div class="evidence-box">
+        <p>Personal + team tracking tool capturing daily stand-up answers, taskboard walkthroughs, retrospective insights and weekly reflections across the entire July–October 2026 period.</p>
+        <p><strong>Recurring themes:</strong> prototyping & refining wireframes after feedback, creating the GitHub repository, design system & colour scheme improvements, presentation prep, honest time-management challenges.</p>
+        
+        <p style="margin-top:1rem; font-weight:700; color:var(--pink);">📚 Click any logbook below to view the full PDF:</p>
+        
+        <div class="doc-grid">
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2014-17%20July%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">14–17 July 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2021-24%20July%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">21–24 July 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2028-31%20July%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">28–31 July 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%20%204-7%20August%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">4–7 August 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2011-14%20August%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">11–14 August 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2015-18%20Sept%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">15–18 September 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2022-25%20Sept%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">22–25 September 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2029-02%20Oct%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">29 Sept – 2 Oct 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2006-09%20Oct%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">6–9 October 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2013-16%20Oct%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">13–16 October 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2020-23%20Oct%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">20–23 October 2026</span>
+          </a>
+          <a class="doc-card" href="assets/evidence/logbook-pdf/PRP372S%20Agile%20Logbook%2027-30%20Oct%202026.pdf" target="_blank">
+            <span class="icon">📔</span>
+            <span class="title">27–30 October 2026</span>
+          </a>
+        </div>
+        
+        <p style="margin-top:1rem; font-size:0.9rem; color:var(--muted);">
+          Original Word documents are also available in the 
+          <a href="assets/evidence/logbook/" style="color:var(--pink); font-weight:700;">logbook folder</a>.
+        </p>
+      </div>
+
+      <h3>🌟 Reflection — STAR Method</h3>
+      <div class="star-box">
+        <div class="star-part">
+          <span class="star-label s">Situation</span>
+          <p>Agile ceremonies only create value if conversations are captured and acted upon. Without a logbook, insights from stand-ups and retrospectives would disappear after the meeting.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label t">Task</span>
+          <p>Keep a consistent, honest Agile Logbook that recorded daily progress, impediments and learning so that patterns became visible over the months.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label a">Action</span>
+          <p>I treated the logbook as a non-negotiable habit. After every stand-up I wrote what I completed, planned next, and any blockers (including personal ones). When the lecturer requested a more appealing colour scheme I recorded the feedback, redesign actions and outcome.</p>
+        </div>
+        <div class="star-part">
+          <span class="star-label r">Result</span>
+          <p>The logbook became powerful evidence of continuous improvement. I can now see the journey from “time management is hard” to “we flag risks 48 hours early”. Writing weekly reflections trained me to think critically about my own process.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL -->
+    <section id="final">
+      <div class="section-header">
+        <div class="section-icon">🎯</div>
+        <h2>Final Reflection & Learning</h2>
+      </div>
+
+      <p>Building LaunchPad.dev under real Agile practices taught me far more than any textbook could.</p>
+
+      <h3>What I’m most proud of</h3>
+      <ul>
+        <li>Turning a fuzzy idea into a <strong>deployed, working prototype</strong></li>
+        <li>Learning to write user stories that actually guide development</li>
+        <li>Experiencing the power of a living Team Charter and honest logbooks</li>
+        <li>Improving visual design through iterative feedback loops</li>
+      </ul>
+
+      <h3>Key personal growth</h3>
+      <ul>
+        <li>I became much better at raising blockers early instead of struggling silently</li>
+        <li>I learned that “done” must be defined together — otherwise everyone has a different picture</li>
+        <li>I discovered I enjoy the facilitation and clarity work of Agile ceremonies as much as the hands-on design & prototyping</li>
+      </ul>
+
+      <p style="margin-top:1.5rem;">This portfolio is not just evidence for a mark — it is a record of how a small student team became a high-functioning Agile unit.</p>
+      <p style="font-size:1.2rem; margin-top:1rem;">Thank you for reading 💜</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Made with <span class="heart">✨</span>, Trello cards, many stand-ups, and a little bit of magic</p>
+    <p style="margin-top:0.5rem;">PRP372S · Cape Peninsula University of Technology · October 2026</p>
+    <div style="margin-top:1.2rem;">
+      <a class="link-pill" href="https://launchpad-ev-production.up.railway.app/" target="_blank">🌐 Live App</a>
+      <a class="link-pill" href="assets/evidence/team-charter/Agile%20Team%20Charter.pdf" target="_blank">📄 Team Charter</a>
+    </div>
+  </footer>
+
+  <script>
+    // Simple active nav highlighting
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(sec => {
+        const top = sec.offsetTop - 120;
+        if (scrollY >= top) current = sec.getAttribute('id');
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+</body>
+</html>
